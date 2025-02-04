@@ -1,21 +1,39 @@
 {
-    "manifest_version": 3,
-    "name": "Bread Converter",
-    "description": "Convert any currency to any just by selecting the numbers on any website",
-    "version": "1.0",
-    "icons": {
+  "manifest_version": 3,
+  "name": "Number Select Popup",
+  "version": "1.0",
+  "description": "Displays a popup when a number is selected on a webpage.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+
+  "icons": {
+    "16": "icon/exchange-16.png",
+    "32": "icon/exchange-32.png",
+    "64": "icon/exchange-64.png",
+    "128": "icon/exchange-128.png"
+  },
+  "action": {
+    "default_icon": {
       "16": "icon/exchange-16.png",
       "32": "icon/exchange-32.png",
       "64": "icon/exchange-64.png",
       "128": "icon/exchange-128.png"
     },
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "host_permissions": [
-      "*"
-    ],
-    "permissions": [
-      "storage"
-    ]
+    "default_popup": "popup.html"
   }
+}
