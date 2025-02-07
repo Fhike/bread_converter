@@ -5,7 +5,8 @@
   "description": "Displays a popup when a number is selected on a webpage.",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"
