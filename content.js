@@ -1,6 +1,10 @@
 var bool = false;
 var convert = 0;
 var Symbol = false;
+var defCurrency = "";
+
+const result = await chrome.storage.sync.get(["defaultCurrency"]);
+    const defCurrency = result.defaultCurrency || "INR"; // Fallback if not set
 
 // List of currency names and symbols
 const currencyNames = ["EUR", "INR", "IDR", "JPY", "PKR", "QAR", "RUB", "ZAR", "SEK", "CHF", "THB", "GBP", "USD", "ZWD"];
@@ -11,14 +15,9 @@ function isNumber(text) {
 }
 // Function to create and position the popup
 async function createPopup(input = "INR", text, rect) {
-    const userBaseCurrecy = await chrome.storage.sync.get(["defaultCurrency"], function (result) {
-        if (result.defaultCurrency) {
-            return result.defaultCurrency;
-        }
 
-    });
     const popup = document.createElement("div");
-    popup.textContent = input + "=" + userBaseCurrecy + text;
+    popup.textContent = input + " = "+ defCurrency + " " + text;
     popup.style.position = "absolute";
     popup.style.top = `${rect.bottom + window.scrollY}px`; // Position below the selection
     popup.style.left = `${rect.left + window.scrollX}px`;
@@ -44,11 +43,11 @@ document.addEventListener("mouseup", async (event) => {
         console.log(currencySymbols.indexOf("€"))
      
         if(arr.length == 1){
-            convert = await currencyConvert(arr[0], chrome.storage.local.get["default_currency"]);
+            convert = await currencyConvert(arr[0], defCurrency);
         }else  if (!Symbol) {
-            convert = await currencyConvert(arr[0], chrome.storage.local.get["default_currency"],arr[1]);
+            convert = await currencyConvert(arr[0], defCurrency,arr[1]);
         } else  {
-            convert = await currencyConvert(arr[0], chrome.storage.local.get["default_currency"],currencyNames[currencySymbols.indexOf(arr[1])]);
+            convert = await currencyConvert(arr[0], defCurrency,currencyNames[currencySymbols.indexOf(arr[1])]);
         }
         const selectionRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
       
@@ -76,7 +75,7 @@ const checkCases = (arr) => {
     return result;
 }
 // Function to convert the currency
-async function currencyConvert(amount, to_currency = "INR", base_currency ="USD") {
+async function currencyConvert(amount, to_currency , base_currency ="USD") {
     //var url = `https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_86v58bCMvaIlKBpMm4jAkPnCJxq3CF3vepCS5pVU&currencies=${to_currency}&base_currency=${base_currency}`;
 
     var url = `https://hexarate.paikama.co/api/rates/latest/${base_currency}?target=${to_currency}`
