@@ -1,10 +1,7 @@
 var bool = false;
 var convert = 0;
 var Symbol = false;
-var defCurrency = "";
 
-const result = await chrome.storage.sync.get(["defaultCurrency"]);
-    const defCurrency = result.defaultCurrency || "INR"; // Fallback if not set
 
 // List of currency names and symbols
 const currencyNames = ["EUR", "INR", "IDR", "JPY", "PKR", "QAR", "RUB", "ZAR", "SEK", "CHF", "THB", "GBP", "USD", "ZWD"];
@@ -14,10 +11,10 @@ function isNumber(text) {
     return text.match(/^\D{0,3}\s?\d+\s?\D{0,3}$/g);
 }
 // Function to create and position the popup
-async function createPopup(input = "INR", text, rect) {
+async function createPopup(defCurrency, input = "INR", rect, text) {
 
     const popup = document.createElement("div");
-    popup.textContent = input + " = "+ defCurrency + " " + text;
+    popup.textContent = input + " = " + defCurrency + " " + text;
     popup.style.position = "absolute";
     popup.style.top = `${rect.bottom + window.scrollY}px`; // Position below the selection
     popup.style.left = `${rect.left + window.scrollX}px`;
@@ -36,37 +33,38 @@ async function createPopup(input = "INR", text, rect) {
 }
 // Listen for mouseup events to detect text selection
 document.addEventListener("mouseup", async (event) => {
+    const result = await chrome.storage.sync.get(["defaultCurrency"]);
+    const defCurrency = result.defaultCurrency || "INR"; // Fallback if not set
+    
     const selectedText = window.getSelection().toString();
     if (isNumber(selectedText)) {
         const arr = checkCases(splitCurrencyAndNumber(selectedText));
-        console.log(arr);
-        console.log(currencySymbols.indexOf("€"))
-     
-        if(arr.length == 1){
+    
+        if (arr.length == 1) {
             convert = await currencyConvert(arr[0], defCurrency);
-        }else  if (!Symbol) {
-            convert = await currencyConvert(arr[0], defCurrency,arr[1]);
-        } else  {
-            convert = await currencyConvert(arr[0], defCurrency,currencyNames[currencySymbols.indexOf(arr[1])]);
+        } else if (!Symbol) {
+            convert = await currencyConvert(arr[0], defCurrency, arr[1]);
+        } else {
+            convert = await currencyConvert(arr[0], defCurrency, currencyNames[currencySymbols.indexOf(arr[1])]);
         }
         const selectionRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
-      
+
         if (bool)
-            createPopup(selectedText, convert, selectionRect);
+            createPopup(defCurrency, selectedText, selectionRect, convert);
         else
-            createPopup(selectedText, selectionRect);
+            createPopup(defCurrency, selectedText, selectionRect);
 
     }
 });
 // Function to check the cases of the selected text
 const checkCases = (arr) => {
-    var result=[];
+    var result = [];
     arr.forEach(element => {
-        if(/^\d+$/.test(element.trim())){
+        if (/^\d+$/.test(element.trim())) {
             result[0] = element;
-        }else if(currencyNames.includes(element.trim())){
+        } else if (currencyNames.includes(element.trim())) {
             result[1] = element;
-        }else if(currencySymbols.includes(element.trim())){
+        } else if (currencySymbols.includes(element.trim())) {
             result[1] = element;
             Symbol = true;
         }
@@ -75,7 +73,7 @@ const checkCases = (arr) => {
     return result;
 }
 // Function to convert the currency
-async function currencyConvert(amount, to_currency , base_currency ="USD") {
+async function currencyConvert(amount, to_currency, base_currency = "USD") {
     //var url = `https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_86v58bCMvaIlKBpMm4jAkPnCJxq3CF3vepCS5pVU&currencies=${to_currency}&base_currency=${base_currency}`;
 
     var url = `https://hexarate.paikama.co/api/rates/latest/${base_currency}?target=${to_currency}`
@@ -85,7 +83,7 @@ async function currencyConvert(amount, to_currency , base_currency ="USD") {
     bool = true;
     return (amount * data["data"]["mid"]).toFixed(2);
 
-    
+
 }
 function splitCurrencyAndNumber(text) {
     // Regex to match currency symbols or text followed by a number, or vice versa
@@ -98,8 +96,8 @@ function splitCurrencyAndNumber(text) {
         const number = matches[2] || matches[3];   // Number
         // Return the result as an array
         return [currency, number];
-      }
-      // If no match is found, return the original text in an array
-      return [text];
-  
+    }
+    // If no match is found, return the original text in an array
+    return [text];
+
 }
