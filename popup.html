@@ -3,12 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bread COnverter</title>
+    <title>Bread Converter</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <p>Hello Every one</p>
-    <div></div>
+    <h2>Welcome to Bread Converter</h2>
+    
+    <label for="currency-select">Set Default Currency:</label>
+    <select id="currency-select">
+        <option value="EUR">Euro (€)</option>
+        <option value="INR">Indian Rupee (₹)</option>
+        <option value="IDR">Indonesia Rupiah (Rp)</option>
+        <option value="JPY">Japan Yen (¥)</option>
+        <option value="PKR">Pakistan Rupee (Rs)</option>
+        <option value="QAR">Qatar Riyal (﷼)</option>
+        <option value="RUB">Russia Ruble (₽)</option>
+        <option value="ZAR">South Africa Rand (R)</option>
+        <option value="SEK">Sweden Krona (kr)</option>
+        <option value="CHF">Switzerland Franc (CHF)</option>
+        <option value="THB">Thailand Baht (฿)</option>
+        <option value="GBP">United Kingdom Pound (£)</option>
+        <option value="USD">United States Dollar ($)</option>
+        <option value="ZWD">Zimbabwe Dollar (Z$)</option>
+    </select>
+
+    <h3>How to Guide</h3>
+    <p>Select any currency on a webpage, and a popup will show the converted value based on your default currency.</p>
+
     <script src="popup.js"></script>
 </body>
 </html>
