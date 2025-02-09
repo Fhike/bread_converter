@@ -3,29 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy</title>
+    <title>Privacy Policy - Bread Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p, li {
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
-    <h1>Privacy Policy for [Your Extension Name]</h1>
-    <p><strong>Effective Date:</strong> [Date]</p>
+    <h1>Privacy Policy for Bread Converter</h1>
+    <p><strong>Effective Date:</strong> 09-02-25</p>
     
-    <h2>1. Introduction</h2>
-    <p>[Your Extension Name] does not collect, store, or share personal data.</p>
+    <h2>Introduction</h2>
+    <p>Bread Converter is designed to provide a seamless currency conversion experience. We respect your privacy and ensure that no personal data is collected, stored, or shared.</p>
     
-    <h2>2. Information We Collect</h2>
-    <p>This extension does not track or store personal data.</p>
+    <h2>Information We Collect</h2>
+    <p>This extension does not collect, track, or store any personal information.</p>
+    <p>The only data stored locally is your default currency preference, which is saved using Chrome’s storage API for convenience.</p>
+    <p>Currency conversion rates are retrieved from the HexaRate API but are not linked to any user-identifiable data.</p>
     
-    <h2>3. Permissions Used</h2>
+    <h2>Permissions We Use and Why</h2>
     <ul>
-        <li><strong>activeTab:</strong> Only accesses the current tab when the user interacts.</li>
-        <li><strong>scripting:</strong> Detects selected text for currency conversion.</li>
-        <li><strong>storage:</strong> Saves user's default currency preference locally.</li>
+        <li><strong>activeTab:</strong> Allows the extension to access the current tab only when the user interacts with it, ensuring privacy and security.</li>
+        <li><strong>scripting:</strong> Enables the extension to inject a script that detects selected currency values and displays a conversion popup, without modifying webpage content.</li>
+        <li><strong>storage:</strong> Used only to remember the user's default currency setting within Chrome's local storage.</li>
     </ul>
-
-    <h2>4. Third-Party Services</h2>
-    <p>We use the ExchangeRates API for conversion rates.</p>
-
-    <h2>5. Contact</h2>
-    <p>If you have questions, contact us at <strong>[Your Email or GitHub Link]</strong>.</p>
+    
+    <h2>How We Use This Information</h2>
+    <p>The extension functions entirely on the user’s device and does not transmit any data externally.</p>
+    <p>No analytics, tracking, or background data collection occurs.</p>
+    
+    <h2>Third-Party Services</h2>
+    <p>We use the HexaRate API to fetch live currency rates.</p>
+    <p>No personally identifiable information is sent to or stored by this service.</p>
+    
+    <h2>Security & User Control</h2>
+    <p>The extension runs only when manually triggered by the user, ensuring privacy.</p>
+    <p>Users can remove the extension at any time from their browser settings.</p>
 </body>
 </html>
