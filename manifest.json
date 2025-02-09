@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Number Select Popup",
+  "name": "Bread Converter",
   "version": "1.0",
-  "description": "Displays a popup when a number is selected on a webpage.",
+  "description": "A simple browser extension for currency conversion. Select any currency value on a webpage, and a hovering box will display the converted amount in real-time.",
   "permissions": [
     "activeTab",
     "scripting",
