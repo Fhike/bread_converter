@@ -8,7 +8,9 @@ const currencyNames = ["EUR", "INR", "IDR", "JPY", "PKR", "QAR", "RUB", "ZAR", "
 const currencySymbols = ["€", "₹", "Rp", "¥", "Rs", "﷼", "₽", "R", "kr", "CHF", "฿", "£", "$", "Z$"];
 // Function to check if the selected text is a number
 function isNumber(text) {
-    return text.match(/^\D{0,3}\s?\d+\s?\D{0,3}$/g);
+    const regexcheck = text.match(/^\D{0,3}\s?\d+|\d+\s?\D{0,3}$/g);
+    console.log(regexcheck, "isNumber");
+    return regexcheck;
 }
 // Function to create and position the popup
 async function createPopup(defCurrency, input = "INR", rect, text) {
@@ -60,7 +62,7 @@ document.addEventListener("mouseup", async (event) => {
 const checkCases = (arr) => {
     var result = [];
     arr.forEach(element => {
-        if (/^\d+$/.test(element.trim())) {
+        if (/^\d+\.?\d*$/.test(element.trim())) {
             result[0] = element;
         } else if (currencyNames.includes(element.trim())) {
             result[1] = element;
@@ -76,7 +78,7 @@ const checkCases = (arr) => {
 async function currencyConvert(amount, to_currency, base_currency = "USD") {
     //var url = `https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_86v58bCMvaIlKBpMm4jAkPnCJxq3CF3vepCS5pVU&currencies=${to_currency}&base_currency=${base_currency}`;
 
-    var url = `https://hexarate.paikama.co/api/rates/latest/${base_currency}?target=${to_currency}`
+    var url = `https://hexarate.paikama.co/api/rates/latest/${base_currency}?target=${to_currency}`;
     const response = await fetch(url);
     const data = await response.json();
 
@@ -87,9 +89,10 @@ async function currencyConvert(amount, to_currency, base_currency = "USD") {
 }
 function splitCurrencyAndNumber(text) {
     // Regex to match currency symbols or text followed by a number, or vice versa
-    const regex = /([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)\s*(\d+)|(\d+)\s*([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)/g;
+    const regex = /([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)\s*(\d+\.?\d*)|(\d+\.?\d*)\s*([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)/g;
     // Execute the regex on the input text
     const matches = regex.exec(text);
+    console.log(matches, "splitCurrencyAndNumber");
     if (matches) {
         // Extract the currency and number parts
         const currency = matches[1] || matches[4]; // Currency symbol or text
