@@ -40,17 +40,20 @@ document.addEventListener("mouseup", async (event) => {
     
     const selectedText = window.getSelection().toString();
     if (isNumber(selectedText)) {
-        const arr = checkCases(splitCurrencyAndNumber(selectedText));
-    
+        const array = splitCurrencyAndNumber(selectedText);
+        const arr = checkCases(array);
+        const ok = arr[0].toString();
+        const number = checkforcoma(ok.toString(),true);
         if (arr.length == 1) {
-            convert = await currencyConvert(arr[0], defCurrency);
+            convert = await currencyConvert(number, defCurrency);
         } else if (!Symbol) {
-            convert = await currencyConvert(arr[0], defCurrency, arr[1]);
+            convert = await currencyConvert(number, defCurrency, arr[1]);
         } else {
-            convert = await currencyConvert(arr[0], defCurrency, currencyNames[currencySymbols.indexOf(arr[1])]);
+            convert = await currencyConvert(number, defCurrency, currencyNames[currencySymbols.indexOf(arr[1])]);
         }
         const selectionRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
 
+        // const value = checkforcoma(convert.toString(),false);
         if (bool)
             createPopup(defCurrency, selectedText, selectionRect, convert);
         else
@@ -62,7 +65,7 @@ document.addEventListener("mouseup", async (event) => {
 const checkCases = (arr) => {
     var result = [];
     arr.forEach(element => {
-        if (/^\d+\.?\d*$/.test(element.trim())) {
+        if (/^\d+\,?\.?\d*$/.test(element.trim())) {
             result[0] = element;
         } else if (currencyNames.includes(element.trim())) {
             result[1] = element;
@@ -71,7 +74,7 @@ const checkCases = (arr) => {
             Symbol = true;
         }
     });
-
+    console.log(result, "checkCases");
     return result;
 }
 // Function to convert the currency
@@ -89,7 +92,7 @@ async function currencyConvert(amount, to_currency, base_currency = "USD") {
 }
 function splitCurrencyAndNumber(text) {
     // Regex to match currency symbols or text followed by a number, or vice versa
-    const regex = /([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)\s*(\d+\.?\d*)|(\d+\.?\d*)\s*([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)/g;
+    const regex = /([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)\s*(\d+\,?\.?\d*)|(\d+\,?\.?\d*)\s*([A-Za-z\$€₹(Rp)¥(Rs)(﷼)₽R(kr)(CHF)฿£$(Z$)]+)/g;
     // Execute the regex on the input text
     const matches = regex.exec(text);
     console.log(matches, "splitCurrencyAndNumber");
@@ -97,10 +100,26 @@ function splitCurrencyAndNumber(text) {
         // Extract the currency and number parts
         const currency = matches[1] || matches[4]; // Currency symbol or text
         const number = matches[2] || matches[3];   // Number
-        // Return the result as an array
+
         return [currency, number];
     }
     // If no match is found, return the original text in an array
     return [text];
 
+}
+
+const checkforcoma = (number,convert) => {
+    if (number.includes(",") && convert) {
+        return number.replace(",", "");
+    }else{
+        if (number.length > 3) {
+            let lastThree = number.slice(-3);
+            let otherNumbers = number.slice(0, -3);
+            otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+            return otherNumbers + "," + lastThree;
+        }
+        
+    }
+    console.log(number, "checkforcoma");
+    return number;
 }
